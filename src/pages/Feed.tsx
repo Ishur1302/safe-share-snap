@@ -110,7 +110,7 @@ const Feed = () => {
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">Your Feed</h2>
-          <SeedDataButton />
+          {import.meta.env.DEV && <SeedDataButton />}
         </div>
         <CreatePost onPostCreated={fetchPosts} />
         {posts.length === 0 ? (
