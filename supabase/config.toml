@@ -1,0 +1,4 @@
+project_id = "dsqsrlinospvamnfbwky"
+
+[functions.moderate-content]
+verify_jwt = true
