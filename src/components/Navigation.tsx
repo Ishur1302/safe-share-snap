@@ -18,6 +18,7 @@ const Navigation = () => {
     { path: "/feed", icon: Home, label: "Feed" },
     { path: "/messages", icon: MessageCircle, label: "Messages" },
     { path: "/safety", icon: Shield, label: "Safety" },
+    { path: "/test-moderation", icon: Shield, label: "Test AI" },
   ];
 
   return (

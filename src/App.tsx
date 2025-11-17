@@ -7,6 +7,7 @@ import Auth from "./pages/Auth";
 import Feed from "./pages/Feed";
 import Messages from "./pages/Messages";
 import Safety from "./pages/Safety";
+import TestModeration from "./pages/TestModeration";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/feed" element={<Feed />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/safety" element={<Safety />} />
+          <Route path="/test-moderation" element={<TestModeration />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

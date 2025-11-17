@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import Navigation from "@/components/Navigation";
 import PostCard from "@/components/PostCard";
 import CreatePost from "@/components/CreatePost";
+import SeedDataButton from "@/components/SeedDataButton";
 import { Loader2 } from "lucide-react";
 
 interface Post {
@@ -107,6 +108,10 @@ const Feed = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold">Your Feed</h2>
+          <SeedDataButton />
+        </div>
         <CreatePost onPostCreated={fetchPosts} />
         {posts.length === 0 ? (
           <div className="text-center py-12">
