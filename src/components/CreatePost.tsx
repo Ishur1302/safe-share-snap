@@ -26,7 +26,7 @@ const CreatePost = ({ onPostCreated }: CreatePostProps) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      const fileName = `${user.id}-${Date.now()}-${imageFile.name}`;
+      const fileName = `${user.id}/${Date.now()}-${imageFile.name}`;
       const { error: uploadError } = await supabase.storage
         .from("post-images")
         .upload(fileName, imageFile);
