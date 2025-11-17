@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { toast } from "sonner";
+import { z } from "zod";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,15 @@ interface Message {
   created_at: string;
   sender: { username: string };
 }
+
+// Validation schemas
+const messageSchema = z.object({
+  receiverId: z.string().uuid({ message: "Invalid receiver ID format" }),
+  messageText: z.string().max(2000, { message: "Message must be less than 2000 characters" }),
+});
+
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const Messages = () => {
   const navigate = useNavigate();
@@ -85,9 +95,47 @@ const Messages = () => {
 
     setSending(true);
     try {
+      // Validate input
+      const validation = messageSchema.safeParse({
+        receiverId,
+        messageText: messageText || "",
+      });
+
+      if (!validation.success) {
+        const errorMessage = validation.error.errors[0].message;
+        toast.error(errorMessage);
+        setSending(false);
+        return;
+      }
+
+      // Validate receiver exists
+      const { data: receiverProfile, error: profileError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", receiverId)
+        .single();
+
+      if (profileError || !receiverProfile) {
+        toast.error("Receiver not found. Please check the user ID.");
+        setSending(false);
+        return;
+      }
+
       let imageUrl = null;
 
       if (imageFile) {
+        // Validate image file
+        if (!ALLOWED_IMAGE_TYPES.includes(imageFile.type)) {
+          toast.error("Invalid image type. Only JPEG, PNG, GIF, and WEBP are allowed.");
+          setSending(false);
+          return;
+        }
+
+        if (imageFile.size > MAX_IMAGE_SIZE) {
+          toast.error("Image size must be less than 10MB.");
+          setSending(false);
+          return;
+        }
         const { data: moderationData, error: moderationError } = await supabase.functions.invoke(
           "moderate-content",
           { body: { imageFile: await fileToBase64(imageFile) } }
