@@ -125,7 +125,7 @@ const Messages = () => {
           return;
         }
 
-        const fileName = `${session.user.id}-${Date.now()}-${imageFile.name}`;
+        const fileName = `${session.user.id}/${Date.now()}-${imageFile.name}`;
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from("message-images")
           .upload(fileName, imageFile);
