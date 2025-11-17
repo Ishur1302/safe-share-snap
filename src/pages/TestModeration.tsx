@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
@@ -11,6 +11,7 @@ const TestModeration = () => {
   const navigate = useNavigate();
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleTestImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -65,29 +66,31 @@ const TestModeration = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="border-2 border-dashed rounded-lg p-8 text-center">
-              <label className="cursor-pointer block">
-                <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mb-4">
-                  Click to upload an image for testing
-                </p>
-                <Button disabled={testing}>
-                  {testing ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Analyzing...
-                    </>
-                  ) : (
-                    "Choose Image"
-                  )}
-                </Button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleTestImage}
-                  className="hidden"
-                  disabled={testing}
-                />
-              </label>
+              <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground mb-4">
+                Click to upload an image for testing
+              </p>
+              <Button 
+                disabled={testing}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {testing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  "Choose Image"
+                )}
+              </Button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleTestImage}
+                className="hidden"
+                disabled={testing}
+              />
             </div>
 
             {result && (
