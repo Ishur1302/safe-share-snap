@@ -87,16 +87,26 @@ Be strict but fair. Prioritize safety.`,
     
     let result;
     try {
-      result = JSON.parse(content);
-    } catch {
+      // Remove markdown code blocks if present
+      const jsonMatch = content.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
+      const jsonString = jsonMatch ? jsonMatch[1].trim() : content.trim();
+      result = JSON.parse(jsonString);
+    } catch (parseError) {
+      console.error("Failed to parse AI response:", parseError);
+      // Fallback: try to extract values manually
       const isFlagged = content.toLowerCase().includes('"isflagged": true') ||
                         content.toLowerCase().includes('inappropriate') ||
                         content.toLowerCase().includes('explicit') ||
                         content.toLowerCase().includes('nude');
+      
+      // Try to extract confidence from the response
+      const confMatch = content.match(/"confidence":\s*([\d.]+)/);
+      const confidence = confMatch ? parseFloat(confMatch[1]) : 0.8;
+      
       result = {
         isFlagged,
         reason: isFlagged ? "Content flagged by AI moderator" : "Content appears safe",
-        confidence: 0.8,
+        confidence,
       };
     }
 
