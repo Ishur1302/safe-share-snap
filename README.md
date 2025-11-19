@@ -70,5 +70,3 @@ To connect a custom domain, configure your domain's DNS settings and set up the 
 
 
 ***
-
-This removes any mention of Lovable, making the README purely generic and reusable for any project deployment or editing workflow. Let me know if you want me to generate a complete Markdown file format.
