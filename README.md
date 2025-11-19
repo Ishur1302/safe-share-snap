@@ -62,6 +62,12 @@ This project is built with:
 
 Use your preferred deployment platform or service to publish your project.
 
+#make your .env
+VITE_SUPABASE_PROJECT_ID="your_supabase_project_id"
+VITE_SUPABASE_PUBLISHABLE_KEY="your_supabase_publishable_key"
+VITE_SUPABASE_URL="your_supabase_url"
+
+
 ## Can I connect a custom domain to this project?
 
 Yes, you can!
